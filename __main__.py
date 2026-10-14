@@ -1,7 +1,7 @@
 """
 Usage: python . <youtube_url_or_id> <optional file name>
 
-Saves mp4 and mp3 files from the given YouTube video as
+Saves an mp3 file from the given YouTube video as
 <optional file name> or <youtube_id> to the DIR_DESKTOP directory.
 
 """
@@ -18,7 +18,7 @@ YOUTUBE_VIDEO_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{11}$")
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Download one YouTube video as MP4 and MP3 files.",
+        description="Download one YouTube video as an MP3 file.",
     )
     parser.add_argument("youtube_url", help="URL or ID of the YouTube video")
     parser.add_argument(
@@ -74,16 +74,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 2
 
     options = {
-        "format": "bv*+ba/b",
-        "keepvideo": True,
-        "merge_output_format": "mp4",
+        "format": "bestaudio",
         "noplaylist": True,
         "outtmpl": get_output_template(desktop_dir, args.file_name),
         "postprocessors": [
-            {
-                "key": "FFmpegVideoConvertor",
-                "preferedformat": "mp4",
-            },
             {
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
